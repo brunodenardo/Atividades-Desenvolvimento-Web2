@@ -35,7 +35,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-
+		/*
 		Empresa empresa = new Empresa();
 		empresa.setRazaoSocial("Car service toyota ltda");
 		empresa.setNomeFantasia("Car service manutenção veicular");
@@ -259,6 +259,6 @@ public class AutomanagerApplication implements CommandLineRunner {
 		empresa.getVendas().add(venda2);
 		
 		repositorioEmpresa.save(empresa);
-
+		*/
 	}
 }

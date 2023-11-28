@@ -11,7 +11,15 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class CredencialUsuarioSenha extends Credencial {
 	@Column(nullable = false, unique = true)
-	private String nomeUsuario;
+	private String login;
 	@Column(nullable = false)
 	private String senha;
+	
+	public CredencialUsuarioSenha() {}
+	
+	public CredencialUsuarioSenha(String login, String senha) {
+		this.login = login;
+		this.senha = senha;
+		
+	}
 }

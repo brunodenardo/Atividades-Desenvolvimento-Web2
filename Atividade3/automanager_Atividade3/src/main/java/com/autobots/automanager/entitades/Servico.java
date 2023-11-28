@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.autobots.automanager.dto.DadosServico;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,4 +24,12 @@ public class Servico {
 	private double valor;
 	@Column
 	private String descricao;
+	
+	public Servico() {}
+	
+	public Servico(DadosServico dadosServico) {
+		this.nome = dadosServico.nome();
+		this.valor = dadosServico.valor();
+		this.descricao = dadosServico.descricao();
+	}
 }

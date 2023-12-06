@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.hateoas.Link;
+
 import com.autobots.automanager.entitades.Documento;
 import com.autobots.automanager.entitades.Email;
 import com.autobots.automanager.entitades.Endereco;
@@ -19,7 +21,8 @@ public record DadosObterEmpresa(
 		Endereco endereco,
 		Date cadastro,
 		Set<Mercadoria> mercadorias,
-		Set<Servico> servicos
+		Set<Servico> servicos,
+		List<Link> linksRelacionados
 		) {
 	
 }

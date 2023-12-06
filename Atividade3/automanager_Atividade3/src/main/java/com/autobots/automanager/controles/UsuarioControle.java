@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.autobots.automanager.dto.DadosAtualizacaoUsuario;
 import com.autobots.automanager.dto.DadosCadastroUsuario;
 import com.autobots.automanager.dto.DadosListagemUsuario;
+import com.autobots.automanager.dto.RetornoListagemUsuario;
+import com.autobots.automanager.dto.RetornoObterUsuario;
 import com.autobots.automanager.entitades.CredencialUsuarioSenha;
 import com.autobots.automanager.entitades.Mercadoria;
 import com.autobots.automanager.entitades.Usuario;
@@ -27,6 +30,7 @@ import com.autobots.automanager.entitades.Veiculo;
 import com.autobots.automanager.repositorios.RepositorioUsuario;
 import com.autobots.automanager.servicos.MercadoriaAtualiza;
 import com.autobots.automanager.servicos.UsuarioAtualizar;
+import com.autobots.automanager.servicos.UsuarioGeraLink;
 import com.autobots.automanager.servicos.UsuarioListar;
 import com.autobots.automanager.servicos.VeiculoAtualiza;
 
@@ -49,59 +53,72 @@ public class UsuarioControle {
 	@Autowired
 	private RepositorioUsuario repositorio_usuario;
 	
+	@Autowired
+	private UsuarioGeraLink geraLink;
+	
 	@GetMapping
-	public ResponseEntity<List<DadosListagemUsuario>> listarTodosUsuarios(){
+	public ResponseEntity<RetornoListagemUsuario> listarTodosUsuarios(){
 		List<DadosListagemUsuario> usuarios = usuarioListagem.listarTodos();
-		return ResponseEntity.ok(usuarios);
+		return ResponseEntity.ok(new RetornoListagemUsuario(usuarios, geraLink.gerar()));
+	}
+	
+	@GetMapping("/{id_usuario}")
+	public ResponseEntity<RetornoObterUsuario> obterUsuario(@PathVariable Long id_usuario){
+		try {
+			DadosListagemUsuario usuario = usuarioListagem.obterUsuario(id_usuario);
+			return ResponseEntity.ok(new RetornoObterUsuario(usuario, geraLink.gerar()));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity cadastrarUsuario(@RequestBody DadosCadastroUsuario dadosUsuario) {
+	public ResponseEntity<List<Link>> cadastrarUsuario(@RequestBody DadosCadastroUsuario dadosUsuario) {
 		Usuario usuario = new Usuario(dadosUsuario);
 		repositorio_usuario.save(usuario);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body(geraLink.gerar());
 	}
 	
 	@PutMapping
 	@Transactional
-	public ResponseEntity atualizarUsuario(@RequestBody DadosAtualizacaoUsuario dadosAtualizacao) {
+	public ResponseEntity<List<Link>> atualizarUsuario(@RequestBody DadosAtualizacaoUsuario dadosAtualizacao) {
 		Boolean atualizou = usuarioAtualizacao.atualizarUsuario(dadosAtualizacao);
 		if(atualizou) {
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok().body(geraLink.gerar());
 		}
-		return ResponseEntity.badRequest().body("Usuario não encontrado");
+		return ResponseEntity.badRequest().body(geraLink.gerar());
 	}
 	
 	@PutMapping("/{usuario_id}/veiculos")
 	@Transactional
-	public ResponseEntity alterarListaVeiculos(
+	public ResponseEntity<List<Link>> alterarListaVeiculos(
 			@PathVariable Long usuario_id,
 			@RequestBody Set<Veiculo> veiculosAtualizar
 			) {
 		Boolean atualizou = veiculoAtualiza.atualizarListaVeiculo(usuario_id, veiculosAtualizar);
 		if(atualizou) {
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok().body(geraLink.gerar());
 		}
-		return ResponseEntity.badRequest().body("Usuario não encontrado");
+		return ResponseEntity.badRequest().body(geraLink.gerar());
 	}
 	
 	@PutMapping("/{usuario_id}/mercadorias")
 	@Transactional
-	public ResponseEntity alterarListaMercadoria(
+	public ResponseEntity<List<Link>> alterarListaMercadoria(
 			@PathVariable Long usuario_id,
 			@RequestBody Set<Mercadoria> mercadoriaAtualizacao
 			) {
 		Boolean atualizou = mercadoriaAtualiza.atualizarListaMercadoria(usuario_id, mercadoriaAtualizacao);
 		if(atualizou) {
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok().body(geraLink.gerar());
 		}
-		return ResponseEntity.badRequest().body("Usuario não encontrado");
+		return ResponseEntity.badRequest().body(geraLink.gerar());
 	}
 	
 	@DeleteMapping("/{usuario_id}")
 	@Transactional
-	public ResponseEntity deletarUsuario(
+	public ResponseEntity<List<Link>> deletarUsuario(
 			@PathVariable Long usuario_id
 			) {
 		Optional<Usuario> optionalUsuario = repositorio_usuario.findById(usuario_id);
@@ -112,9 +129,9 @@ public class UsuarioControle {
 					credencial.setInativo(true);
 				}
 			});
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok().body(geraLink.gerar());
 			
 		}
-		return ResponseEntity.badRequest().body("Usuário não encontrado");
+		return ResponseEntity.badRequest().body(geraLink.gerar());
 	}
 }

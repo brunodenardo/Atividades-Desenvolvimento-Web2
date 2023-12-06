@@ -20,6 +20,9 @@ public class EmpresaListar {
 	@Autowired
 	private RepositorioEmpresa repositorio_empresa;
 	
+	@Autowired
+	private EmpresaGeraLink geraLink;
+	
 	public List<DadosListagemEmpresa> listarTodos() {
 		List<Empresa> empresas = repositorio_empresa.findAll();
 		List<DadosListagemEmpresa> listaEmpresas = new ArrayList<DadosListagemEmpresa>();
@@ -49,7 +52,8 @@ public class EmpresaListar {
 							empresa.getEndereco(),
 							empresa.getCadastro(),
 							empresa.getMercadorias(),
-							empresa.getServicos());
+							empresa.getServicos(),
+							geraLink.gerar());
 			return dadosEmpresa;
 		}
 		return null;

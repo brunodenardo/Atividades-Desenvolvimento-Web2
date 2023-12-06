@@ -94,7 +94,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 
 		CredencialUsuarioSenha credencialFuncionario = new CredencialUsuarioSenha();
 		credencialFuncionario.setInativo(false);
-		credencialFuncionario.setNomeUsuario("dompedrofuncionario");
+		credencialFuncionario.setLogin("dompedrofuncionario");
 		credencialFuncionario.setSenha("123456");
 		credencialFuncionario.setCriacao(new Date());
 		credencialFuncionario.setUltimoAcesso(new Date());
@@ -113,7 +113,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 
 		CredencialUsuarioSenha credencialFornecedor = new CredencialUsuarioSenha();
 		credencialFornecedor.setInativo(false);
-		credencialFornecedor.setNomeUsuario("dompedrofornecedor");
+		credencialFornecedor.setLogin("dompedrofornecedor");
 		credencialFornecedor.setSenha("123456");
 		credencialFornecedor.setCriacao(new Date());
 		credencialFornecedor.setUltimoAcesso(new Date());
@@ -171,7 +171,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 
 		CredencialUsuarioSenha credencialCliente = new CredencialUsuarioSenha();
 		credencialCliente.setInativo(false);
-		credencialCliente.setNomeUsuario("dompedrocliente");
+		credencialCliente.setLogin("dompedrocliente");
 		credencialCliente.setSenha("123456");
 		credencialCliente.setCriacao(new Date());
 		credencialCliente.setUltimoAcesso(new Date());
@@ -215,7 +215,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		venda.setCadastro(new Date());
 		venda.setCliente(cliente);
 		venda.getMercadorias().add(rodaLigaLeve);
-		venda.setIdentificacao("1234698745");
+
 		venda.setFuncionario(funcionario);
 		venda.getServicos().add(trocaRodas);
 		venda.getServicos().add(alinhamento);
@@ -249,7 +249,7 @@ public class AutomanagerApplication implements CommandLineRunner {
 		venda2.setCadastro(new Date());
 		venda2.setCliente(cliente);
 		venda2.getMercadorias().add(rodaLigaLeve2);
-		venda2.setIdentificacao("1234698749");
+
 		venda2.setFuncionario(funcionario);
 		venda2.getServicos().add(balanceamento);
 		venda2.getServicos().add(alinhamento2);

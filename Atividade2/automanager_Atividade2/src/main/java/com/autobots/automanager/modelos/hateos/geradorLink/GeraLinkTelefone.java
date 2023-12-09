@@ -12,7 +12,7 @@ import com.autobots.automanager.entidades.Telefone;
 @Component
 public class GeraLinkTelefone {
 	
-	public Link pegarTelefone(long telefone_id) {
+	public Link pegarTelefone(Long telefone_id) {
 		Link link = WebMvcLinkBuilder
 				.linkTo(WebMvcLinkBuilder
 						.methodOn(TelefoneControle.class)
